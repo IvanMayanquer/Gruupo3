@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Señales — laboratorio interactivo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+    :root{color-scheme:dark;--bg:#0b1020;--panel:#11182b;--panel2:#151e34;--line:#26314a;--muted:#8995ad;--text:#eef3ff;--cyan:#5ce1d2;--blue:#7594ff;--pink:#ff77aa;--lime:#b8ee83;--shadow:0 24px 70px #02051166}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 78% -20%,#1a2a4b 0,transparent 36%),var(--bg);color:var(--text);font:15px 'DM Sans',sans-serif;min-height:100vh}button,input{font:inherit}button{color:inherit}a{color:inherit;text-decoration:none}.shell{max-width:1480px;margin:auto;padding:0 38px}.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff0d}.brand{display:flex;align-items:center;gap:12px;font:800 17px Manrope,sans-serif;letter-spacing:-.04em}.brand-mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(140deg,#76f1dd,#83a0ff);display:grid;place-items:center;color:#0b1422;box-shadow:0 5px 22px #5ce1d244}.brand-mark svg{width:20px}.top-links{display:flex;align-items:center;gap:28px;color:#aab4ca;font-size:13px}.top-links a:hover{color:white}.top-note{font:11px 'DM Mono',monospace;color:var(--cyan);border:1px solid #5ce1d244;background:#5ce1d20b;padding:7px 10px;border-radius:8px;letter-spacing:.04em}
+    .intro{padding:47px 0 30px;display:flex;justify-content:space-between;align-items:flex-end;gap:28px}.eyebrow{font:500 11px 'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:9px}.eyebrow:before{content:"";width:18px;height:1px;background:var(--cyan)}h1{font:700 clamp(32px,4vw,49px)/1.08 Manrope,sans-serif;letter-spacing:-.055em;margin:13px 0 10px}.intro p{margin:0;color:#9aa6bf;font-size:15px;line-height:1.7;max-width:610px}.intro p strong{color:#dae3f3;font-weight:600}.intro-side{font:12px 'DM Mono',monospace;color:#73809a;text-align:right;line-height:1.8}.intro-side b{color:#c5d1e8;font-weight:500}
+    .layout{display:grid;grid-template-columns:295px minmax(0,1fr);gap:18px;align-items:start}.panel{border:1px solid var(--line);border-radius:16px;background:linear-gradient(150deg,#141c30f2,#0f1627f5);box-shadow:var(--shadow)}.controls{padding:20px 18px 18px}.section-label{font:500 10px 'DM Mono',monospace;letter-spacing:.13em;text-transform:uppercase;color:#7d8ba5;margin-bottom:12px}.mode-switch{display:grid;grid-template-columns:1fr 1fr;background:#090e1b;padding:4px;border:1px solid #222d43;border-radius:10px;margin-bottom:20px}.mode-btn{border:0;border-radius:7px;padding:10px 5px;background:transparent;color:#8390a8;cursor:pointer;font-size:12px;transition:.18s}.mode-btn.active{color:#e9ffff;background:#1b3442;box-shadow:inset 0 0 0 1px #5ce1d24d}.mode-btn span{font:11px 'DM Mono',monospace;margin-left:5px;color:var(--cyan)}.preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:21px}.preset{border:1px solid #28334b;background:#121a2c;border-radius:9px;padding:9px 3px 7px;text-align:center;cursor:pointer;color:#a6b2ca;transition:.18s}.preset:hover{border-color:#6073a0;transform:translateY(-1px)}.preset.active{border-color:#5ce1d28c;background:#143039;color:#e9fffb}.preset svg{display:block;width:34px;height:17px;margin:0 auto 6px;overflow:visible}.preset span{font-size:10px}.rule{height:1px;background:#ffffff0c;margin:17px 0}.slider-row{margin:17px 0}.slider-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}.slider-head label{font-size:12px;color:#bdc8dc}.slider-value{font:11px 'DM Mono',monospace;color:var(--cyan);min-width:48px;text-align:right}.range-wrap{display:flex;align-items:center;gap:10px;color:#65728b;font:10px 'DM Mono',monospace}.range-wrap input{width:100%;accent-color:var(--cyan);height:4px;cursor:pointer}.range-wrap input::-webkit-slider-thumb{cursor:grab}.operation-select{width:100%;color:#dae4f5;background:#0c1322;border:1px solid #2a3650;border-radius:8px;padding:10px 11px;font-size:12px;outline:none}.operation-select:focus{border-color:#5ce1d2}.small-help{font-size:10px;line-height:1.5;color:#6f7d96;margin-top:8px}.reset-btn{width:100%;margin-top:14px;padding:10px;border:1px solid #2a3650;border-radius:8px;background:#111a2c;color:#aab7cd;cursor:pointer;font-size:11px;transition:.15s}.reset-btn:hover{border-color:#7888a8;color:white}
+    .maincol{min-width:0}.graph-panel{overflow:hidden}.graph-head{display:flex;justify-content:space-between;align-items:center;padding:17px 19px;border-bottom:1px solid #ffffff0d;gap:14px}.graph-title{display:flex;align-items:center;gap:10px}.live-dot{width:8px;height:8px;border-radius:50%;background:#5ce1d2;box-shadow:0 0 12px #5ce1d2aa}.graph-title strong{font:600 13px Manrope,sans-serif}.graph-title small{display:block;color:#7e8aa2;font-size:10px;margin-top:3px}.graph-actions{display:flex;gap:7px}.icon-btn{width:32px;height:32px;display:grid;place-items:center;background:#141d30;border:1px solid #2a3650;border-radius:8px;color:#96a4bd;cursor:pointer}.icon-btn:hover{color:#f1f7ff;border-color:#65789f}.icon-btn.active{color:var(--cyan);border-color:#5ce1d266}.icon-btn svg{width:15px;height:15px}.canvas-wrap{position:relative;height:405px;background:linear-gradient(180deg,#0e1525,#0d1423)}canvas{width:100%;height:100%;display:block;cursor:crosshair}.tooltip{position:absolute;pointer-events:none;display:none;background:#101a2b;border:1px solid #3b4c68;border-radius:7px;padding:7px 9px;font:10px 'DM Mono',monospace;color:#dce8fa;box-shadow:0 5px 20px #0008;white-space:nowrap;z-index:2}.chart-legend{position:absolute;top:14px;left:18px;display:flex;align-items:center;gap:8px;color:#8592aa;font:10px 'DM Mono',monospace;pointer-events:none}.legend-line{width:17px;height:2px;background:var(--cyan);box-shadow:0 0 7px #5ce1d2}.legend-sample{display:none;width:7px;height:7px;border-radius:50%;background:var(--pink);margin-left:9px}.chart-footer{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-top:1px solid #ffffff0d;color:#78859d;font:10px 'DM Mono',monospace}.chart-footer .hint{display:flex;align-items:center;gap:7px}.chart-footer svg{width:13px;height:13px;color:#8796b1}.formula-panel{margin-top:14px;padding:17px 19px;display:grid;grid-template-columns:1.5fr 1fr;gap:20px}.formula-kicker{font:10px 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#8290aa;margin-bottom:8px}.formula{font:17px 'DM Mono',monospace;color:#dceaff;letter-spacing:-.03em;overflow-wrap:anywhere}.formula .accent{color:var(--cyan)}.formula-sub{font-size:11px;color:#7887a0;margin-top:8px;line-height:1.5}.formula-readout{border-left:1px solid #ffffff12;padding-left:20px;display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;align-content:center}.readout{display:flex;justify-content:space-between;gap:8px;font-size:10px;color:#7f8ca5}.readout b{font:11px 'DM Mono',monospace;color:#cad7ed;font-weight:400}.readout b.green{color:var(--cyan)}
+    .below{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:12px;margin:14px 0 40px}.info-card{padding:15px 16px;min-height:112px}.info-card .num{font:10px 'DM Mono',monospace;color:var(--cyan);margin-bottom:10px}.info-card h3{font:600 12px Manrope,sans-serif;margin:0 0 6px}.info-card p{margin:0;color:#8390a8;font-size:10px;line-height:1.55}.info-card strong{color:#cbd6e9;font-weight:600}.footer{border-top:1px solid #ffffff0d;padding:17px 0 24px;color:#58657e;font-size:10px;display:flex;justify-content:space-between}.footer b{color:#8591a8;font-weight:500}.keyboard{font:10px 'DM Mono',monospace;color:#65738d}
+    .formula-stack{display:grid;gap:9px}.equation-line{display:grid;grid-template-columns:70px minmax(0,1fr);gap:9px;font:11px/1.55 'DM Mono',monospace;color:#dceaff;overflow-wrap:anywhere}.eq-tag{font:10px 'DM Mono',monospace}.eq-tag.a,.accent-a{color:#94aaff}.eq-tag.b,.accent-b{color:#ff94b8}.eq-tag.result,.accent-result{color:var(--cyan)}.formula-readout{grid-template-columns:1fr;gap:9px}.mode-btn.active{background:#1b3442}.preset.active{border-color:#7594ff8c;background:#192541;color:#e9efff}
+    .canvas-wrap{height:auto;padding:12px 14px 14px;display:grid;gap:10px;background:linear-gradient(180deg,#0e1525,#0d1423)}.plot-card{position:relative;border:1px solid #25314a;border-radius:10px;background:#0c1322;overflow:hidden}.plot-heading{height:31px;display:flex;align-items:center;gap:8px;padding:0 12px;color:#b9c6dc;font:11px 'DM Sans',sans-serif}.plot-heading strong{font-weight:600}.plot-heading small{font:10px 'DM Mono',monospace;color:#71809b;margin-left:auto}.plot-key{width:8px;height:8px;border-radius:50%;flex:none}.plot-canvas{width:100%;height:185px;display:block;cursor:crosshair}.plot-card.result-card{border-color:#3a5b5b}.plot-card.result-card .plot-heading{color:#d9fff8}.plot-tooltip{position:absolute;z-index:3}.canvas-wrap>.tooltip{z-index:4}
+    @media(max-width:1000px){.shell{padding:0 22px}.layout{grid-template-columns:260px minmax(0,1fr)}.plot-canvas{height:175px}.formula-panel{grid-template-columns:1fr}.formula-readout{border-left:0;border-top:1px solid #ffffff12;padding:13px 0 0}.below{grid-template-columns:1fr 1fr}.info-card:first-child{grid-column:span 2}}
+    @media(max-width:720px){.shell{padding:0 15px}.topbar{height:62px}.top-links{display:none}.intro{padding:34px 0 23px;display:block}.intro-side{display:none}h1{font-size:36px}.layout{grid-template-columns:1fr}.controls{order:2}.maincol{order:1}.canvas-wrap{padding:9px;gap:8px}.plot-canvas{height:155px}.plot-heading{padding:0 9px}.preset-grid{grid-template-columns:repeat(6,1fr)}.formula-panel{padding:15px}.formula{font-size:14px}.below{grid-template-columns:1fr}.info-card:first-child{grid-column:auto}.chart-footer{font-size:9px}.graph-head{padding:14px}.keyboard{display:none}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Señales, inicio"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h4l3-8 5 16 3-8h5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>señales<span style="color:#71809c;font-weight:500">/lab</span></a>
+      <nav class="top-links"><a href="#laboratorio">Laboratorio</a><a href="#conceptos">Conceptos</a><span class="top-note">INTERACTIVO · 01</span></nav>
+    </header>
+
+    <section class="intro" id="laboratorio">
+      <div><div class="eyebrow">Laboratorio de señales</div><h1>Dos señales. Una operación.</h1><p>Combina dos señales y observa <strong>cada entrada y el resultado</strong> en tiempo continuo o discreto. Ajusta sus parámetros para explorar cómo cambia la operación.</p></div>
+      <div class="intro-side">EXPLORACIÓN EN VIVO<br><b>x₁ + x₂ = y</b></div>
+    </section>
+
+    <div class="layout">
+      <aside class="panel controls">
+        <div class="section-label">01 — Representación</div>
+        <div class="mode-switch" role="tablist" aria-label="Tipo de tiempo">
+          <button class="mode-btn active" data-mode="continuous" role="tab" aria-selected="true">Continua <span>x(t)</span></button>
+          <button class="mode-btn" data-mode="discrete" role="tab" aria-selected="false">Discreta <span>x[n]</span></button>
+        </div>
+        <div class="section-label">02 — Señal A · x₁</div>
+        <select class="operation-select" id="typeA" aria-label="Forma de la señal A">
+          <option value="sine" selected>Seno</option><option value="cosine">Coseno</option><option value="square">Cuadrada</option><option value="triangle">Triangular</option><option value="rect">Pulso rectangular</option><option value="exponential">Exponencial decreciente</option><option value="step">Escalón u</option><option value="ramp">Rampa</option><option value="sinc">Sinc</option><option value="impulse">Impulso δ (solo discreta)</option>
+        </select>
+        <div class="rule"></div>
+        <div class="section-label">03 — Parámetros de x₁</div>
+        <div class="slider-row"><div class="slider-head"><label for="amplitude">Amplitud <i>A</i></label><span class="slider-value" id="amplitudeVal">1.0</span></div><div class="range-wrap"><span>0</span><input id="amplitude" type="range" min="0" max="3" step="0.1" value="1"><span>3</span></div></div>
+        <div class="slider-row" id="frequencyRow"><div class="slider-head"><label for="frequency" id="frequencyLabel">Frecuencia <i>f</i></label><span class="slider-value" id="frequencyVal">1.0 Hz</span></div><div class="range-wrap"><span>0.2</span><input id="frequency" type="range" min="0.2" max="2" step="0.1" value="1"><span>2</span></div></div>
+        <div class="slider-row" id="phaseRow"><div class="slider-head"><label for="phase">Fase <i>φ</i></label><span class="slider-value" id="phaseVal">0°</span></div><div class="range-wrap"><span>−180°</span><input id="phase" type="range" min="-180" max="180" step="5" value="0"><span>180°</span></div></div>
+        <div class="slider-row"><div class="slider-head"><label for="offset">Desplazamiento <i>D</i></label><span class="slider-value" id="offsetVal">0.0</span></div><div class="range-wrap"><span>−2</span><input id="offset" type="range" min="-2" max="2" step="0.1" value="0"><span>2</span></div></div>
+        <div class="slider-row" id="samplingRow" hidden><div class="slider-head"><label for="sampling">Periodo de muestreo <i>Tₛ</i></label><span class="slider-value" id="samplingVal">0.25 s</span></div><div class="range-wrap"><span>0.1</span><input id="sampling" type="range" min="0.1" max="1" step="0.05" value="0.25"><span>1 s</span></div></div>
+        <div class="rule"></div>
+        <div class="section-label">04 — Señal B · x₂</div>
+        <select class="operation-select" id="typeB" aria-label="Forma de la señal B">
+          <option value="sine">Seno</option><option value="cosine" selected>Coseno</option><option value="square">Cuadrada</option><option value="triangle">Triangular</option><option value="rect">Pulso rectangular</option><option value="exponential">Exponencial decreciente</option><option value="step">Escalón u</option><option value="ramp">Rampa</option><option value="sinc">Sinc</option><option value="impulse">Impulso δ (solo discreta)</option>
+        </select>
+        <div class="slider-row"><div class="slider-head"><label for="amplitudeB">Amplitud <i>A₂</i></label><span class="slider-value" id="amplitudeBVal">0.7</span></div><div class="range-wrap"><span>0</span><input id="amplitudeB" type="range" min="0" max="3" step="0.1" value="0.7"><span>3</span></div></div>
+        <div class="slider-row" id="frequencyRowB"><div class="slider-head"><label for="frequencyB" id="frequencyBLabel">Frecuencia <i>f₂</i></label><span class="slider-value" id="frequencyBVal">1.0 Hz</span></div><div class="range-wrap"><span>0.2</span><input id="frequencyB" type="range" min="0.2" max="2" step="0.1" value="1"><span>2</span></div></div>
+        <div class="slider-row" id="phaseRowB"><div class="slider-head"><label for="phaseB">Fase <i>φ₂</i></label><span class="slider-value" id="phaseBVal">0°</span></div><div class="range-wrap"><span>−180°</span><input id="phaseB" type="range" min="-180" max="180" step="5" value="0"><span>180°</span></div></div>
+        <div class="slider-row"><div class="slider-head"><label for="offsetB">Desplazamiento <i>D₂</i></label><span class="slider-value" id="offsetBVal">0.0</span></div><div class="range-wrap"><span>−2</span><input id="offsetB" type="range" min="-2" max="2" step="0.1" value="0"><span>2</span></div></div>
+        <div class="rule"></div>
+        <div class="section-label">05 — Operación matemática</div>
+        <select class="operation-select" id="operation" aria-label="Operación entre las señales">
+          <option value="add">Suma · x₁ + x₂</option><option value="subtract">Resta · x₁ − x₂</option><option value="multiply">Producto · x₁ × x₂</option><option value="divide">Cociente · x₁ ÷ x₂</option>
+        </select>
+        <div class="small-help" id="operationHelp">El resultado se calcula punto a punto entre las dos señales.</div>
+        <button class="reset-btn" id="reset">↺ &nbsp;Restablecer valores</button>
+      </aside>
+
+      <main class="maincol">
+        <section class="panel graph-panel" aria-label="Gráfica interactiva">
+          <div class="graph-head"><div class="graph-title"><span class="live-dot"></span><div><strong id="chartTitle">Señales y resultado</strong><small id="chartSubtitle">Tres gráficas · dominio compartido</small></div></div><div class="graph-actions">
+            <button class="icon-btn" id="play" title="Animar fase" aria-label="Animar fase"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m8 5 11 7-11 7z"/></svg></button>
+            <button class="icon-btn" id="zoomOut" title="Alejar" aria-label="Alejar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="M16 16 21 21M7.5 10.8h6.6"/></svg></button>
+            <button class="icon-btn" id="zoomIn" title="Acercar" aria-label="Acercar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="M16 16 21 21M7.5 10.8h6.6M10.8 7.5v6.6"/></svg></button>
+            <button class="icon-btn active" id="gridToggle" title="Mostrar u ocultar cuadrícula" aria-label="Mostrar u ocultar cuadrícula"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18m6-18v18"/></svg></button>
+          </div></div>
+          <div class="canvas-wrap" id="canvasWrap">
+            <article class="plot-card"><div class="plot-heading"><span class="plot-key" style="background:#7594ff"></span><strong id="plotTitleA">Señal 1 · x₁(t)</strong><small id="plotSubA">Entrada A</small></div><canvas class="plot-canvas" id="plotA" aria-label="Gráfica independiente de la señal 1"></canvas></article>
+            <article class="plot-card"><div class="plot-heading"><span class="plot-key" style="background:#ff77aa"></span><strong id="plotTitleB">Señal 2 · x₂(t)</strong><small id="plotSubB">Entrada B</small></div><canvas class="plot-canvas" id="plotB" aria-label="Gráfica independiente de la señal 2"></canvas></article>
+            <article class="plot-card result-card"><div class="plot-heading"><span class="plot-key" style="background:#5ce1d2"></span><strong id="plotTitleY">Resultado · y(t)</strong><small id="plotSubY">x₁ + x₂</small></div><canvas class="plot-canvas" id="plotY" aria-label="Gráfica independiente del resultado de la operación"></canvas></article>
+            <div class="tooltip" id="tooltip"></div>
+          </div>
+          <div class="chart-footer"><span class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="8"/></svg><span id="axisHint">Eje horizontal: tiempo t (s) · Eje vertical: amplitud</span></span><span class="keyboard">MUEVE EL CURSOR PARA EXPLORAR</span></div>
+        </section>
+        <section class="panel formula-panel">
+          <div><div class="formula-kicker">La operación, paso a paso</div><div class="formula-stack"><div class="equation-line"><span class="eq-tag a">Entrada 1</span><span id="formulaA">x₁(t) = 1.0 · sen(2π · 1.0 · t)</span></div><div class="equation-line"><span class="eq-tag b">Entrada 2</span><span id="formulaB">x₂(t) = 0.7 · cos(2π · 1.0 · t)</span></div><div class="equation-line"><span class="eq-tag result">Resultado</span><span id="formulaResult">y(t) = x₁(t) + x₂(t)</span></div></div><div class="formula-sub" id="formulaSub">Cada curva está identificada por color. Mueve el cursor para comparar sus valores.</div></div>
+          <div class="formula-readout"><div class="readout"><span>x₁ en el cursor</span><b id="valueAReadout">0.00</b></div><div class="readout"><span>x₂ en el cursor</span><b id="valueBReadout">0.70</b></div><div class="readout"><span>Resultado y</span><b id="valueYReadout" class="green">0.70</b></div><div class="readout"><span>Operación</span><b id="operationReadout">Suma (+)</b></div></div>
+        </section>
+      </main>
+    </div>
+    <section class="below" id="conceptos">
+      <article class="panel info-card"><div class="num">IDEA 01 / TIEMPO</div><h3>Continua vs. discreta</h3><p id="conceptCopy">En continuo se opera en cada instante t. En discreto, se combinan muestras con el mismo índice n.</p></article>
+      <article class="panel info-card"><div class="num">IDEA 02 / OPERACIÓN</div><h3>Una regla punto a punto</h3><p id="operationCopy">Para sumar, en cada instante se calcula y = x₁ + x₂.</p></article>
+      <article class="panel info-card"><div class="num">IDEA 03 / EXPLORA</div><h3>Lee los valores</h3><p>Mueve el cursor sobre la gráfica para comparar <strong>las dos entradas y el resultado</strong> en el mismo instante.</p></article>
+    </section>
+    <footer class="footer"><span><b>señales/lab</b> · Un espacio para aprender haciendo.</span><span>Matemática · Visualización · Exploración</span></footer>
+  </div>
+  <script>
+  (() => {
+    const $ = s => document.querySelector(s);
+    const $$ = s => [...document.querySelectorAll(s)];
+    const canvases = { a: $('#plotA'), b: $('#plotB'), y: $('#plotY') };
+    const contexts = { a: canvases.a.getContext('2d'), b: canvases.b.getContext('2d'), y: canvases.y.getContext('2d') };
+    const wrap = $('#canvasWrap'), tooltip = $('#tooltip');
+    const A = { amplitude: $('#amplitude'), frequency: $('#frequency'), phase: $('#phase'), offset: $('#offset'), type: $('#typeA') };
+    const B = { amplitude: $('#amplitudeB'), frequency: $('#frequencyB'), phase: $('#phaseB'), offset: $('#offsetB'), type: $('#typeB') };
+    const sampling = $('#sampling');
+    const symbols = { add: '+', subtract: '−', multiply: '×', divide: '÷' };
+    const opNames = { add: 'Suma (+)', subtract: 'Resta (−)', multiply: 'Producto (×)', divide: 'Cociente (÷)' };
+    const state = { mode: 'continuous', typeA: 'sine', operation: 'add', grid: true, playing: false, zoom: 1, phaseAOverride: null, hover: null };
+    const colors = { a: '#7594ff', b: '#ff77aa', y: '#5ce1d2' };
+    const typeNames = { sine: 'Seno', cosine: 'Coseno', square: 'Cuadrada', triangle: 'Triangular', rect: 'Pulso rectangular', exponential: 'Exponencial decreciente', step: 'Escalón u', ramp: 'Rampa', sinc: 'Sinc', impulse: 'Impulso δ' };
+
+    function params(which) {
+      const controls = which === 'a' ? A : B;
+      const phaseValue = which === 'a' && state.phaseAOverride !== null ? state.phaseAOverride : +controls.phase.value;
+      return { A: +controls.amplitude.value, f: +controls.frequency.value, phase: phaseValue * Math.PI / 180, phaseDeg: phaseValue, D: +controls.offset.value };
+    }
+    function signal(type, t, p) {
+      const angle = 2 * Math.PI * p.f * t + p.phase;
+      switch (type) {
+        case 'sine': return p.A * Math.sin(angle) + p.D;
+        case 'cosine': return p.A * Math.cos(angle) + p.D;
+        case 'square': return p.A * (Math.sin(angle) >= 0 ? 1 : -1) + p.D;
+        case 'triangle': return p.A * (2 / Math.PI) * Math.asin(Math.sin(angle)) + p.D;
+        case 'rect': {
+          const cycle = ((p.f * t + p.phase / (2 * Math.PI)) % 1 + 1) % 1;
+          return p.A * (cycle < 0.5 ? 1 : 0) + p.D;
+        }
+        case 'exponential': return p.A * Math.exp(-p.f * Math.max(0, t)) * (t >= 0 ? 1 : 0) + p.D;
+        case 'step': return p.A * (t >= 0 ? 1 : 0) + p.D;
+        case 'ramp': return p.A * Math.max(0, t) + p.D;
+        case 'sinc': return p.A * (Math.abs(angle) < 1e-8 ? 1 : Math.sin(angle) / angle) + p.D;
+        case 'impulse': return p.D + (Math.abs(t) < 1e-10 ? p.A : 0);
+        default: return 0;
+      }
+    }
+    function valuesAt(x) {
+      const pa = params('a'), pb = params('b');
+      const t = state.mode === 'continuous' ? x : x * +sampling.value;
+      const x1 = signal(state.typeA, t, pa), x2 = signal(B.type.value, t, pb);
+      let y;
+      if (state.operation === 'add') y = x1 + x2;
+      if (state.operation === 'subtract') y = x1 - x2;
+      if (state.operation === 'multiply') y = x1 * x2;
+      if (state.operation === 'divide') y = Math.abs(x2) < 0.05 ? NaN : x1 / x2;
+      return { x1, x2, y, t };
+    }
+    function xRange() { return (state.mode === 'continuous' ? 6 : 12) / state.zoom; }
+    function fmt(n, d = 2) {
+      if (!Number.isFinite(n)) return '—';
+      if (Math.abs(n) < 0.0005) n = 0;
+      return n.toFixed(d);
+    }
+    function signalFormula(which) {
+      const type = which === 'a' ? A.type.value : B.type.value;
+      const p = params(which);
+      const name = which === 'a' ? 'x₁' : 'x₂';
+      const variable = state.mode === 'continuous' ? 't' : 'n';
+      const arg = state.mode === 'continuous' ? p.f.toFixed(1) + ' · t' : p.f.toFixed(1) + ' · n · Tₛ';
+      const phi = p.phaseDeg === 0 ? '' : ' + φ' + (which === 'a' ? '₁' : '₂');
+      const phaseArg = '2π · ' + arg + phi;
+      let body = '';
+      if (type === 'sine') body = p.A.toFixed(1) + ' · sen(' + phaseArg + ')';
+      if (type === 'cosine') body = p.A.toFixed(1) + ' · cos(' + phaseArg + ')';
+      if (type === 'square') body = p.A.toFixed(1) + ' · sgn[sen(' + phaseArg + ')]';
+      if (type === 'triangle') body = p.A.toFixed(1) + ' · (2/π) arcsen[sen(' + phaseArg + ')]';
+      if (type === 'rect') body = p.A.toFixed(1) + ' · p₅₀(' + phaseArg + ')';
+      if (type === 'exponential') body = p.A.toFixed(1) + ' · e^(−λ · ' + (state.mode === 'continuous' ? 't' : 'nTₛ') + ') · u(' + variable + ')';
+      if (type === 'step') body = p.A.toFixed(1) + ' · u(' + variable + ')';
+      if (type === 'ramp') body = p.A.toFixed(1) + ' · ' + variable + ' · u(' + variable + ')';
+      if (type === 'sinc') body = p.A.toFixed(1) + ' · sinc(' + phaseArg + ')';
+      if (type === 'impulse') body = p.A.toFixed(1) + ' · δ' + (state.mode === 'continuous' ? '(t)' : '[n]');
+      if (p.D !== 0) body += p.D > 0 ? ' + ' + p.D.toFixed(1) : ' − ' + Math.abs(p.D).toFixed(1);
+      return name + (state.mode === 'continuous' ? '(t)' : '[n]') + ' = ' + body;
+    }
+    function updateReadouts(x) {
+      const vals = valuesAt(x);
+      $('#valueAReadout').textContent = fmt(vals.x1);
+      $('#valueBReadout').textContent = fmt(vals.x2);
+      $('#valueYReadout').textContent = fmt(vals.y);
+    }
+    function updateSignalControls(which, type) {
+      const controls = which === 'a' ? A : B;
+      const suffix = which === 'a' ? '₁' : '₂';
+      const frequencyRow = $(which === 'a' ? '#frequencyRow' : '#frequencyRowB');
+      const phaseRow = $(which === 'a' ? '#phaseRow' : '#phaseRowB');
+      const frequencyLabel = $(which === 'a' ? '#frequencyLabel' : '#frequencyBLabel');
+      const usesFrequency = ['sine', 'cosine', 'square', 'triangle', 'rect', 'exponential', 'sinc'].includes(type);
+      const usesPhase = ['sine', 'cosine', 'square', 'triangle', 'rect', 'sinc'].includes(type);
+      controls.frequency.disabled = !usesFrequency;
+      controls.phase.disabled = !usesPhase;
+      frequencyRow.style.opacity = usesFrequency ? '1' : '.4';
+      phaseRow.style.opacity = usesPhase ? '1' : '.4';
+      frequencyLabel.innerHTML = type === 'exponential' ? 'Tasa de decaimiento <i>λ' + suffix + '</i>' : 'Frecuencia <i>f' + suffix + '</i>';
+    }
+    function update() {
+      const pa = params('a'), pb = params('b');
+      const typeA = A.type.value, typeB = B.type.value;
+      state.typeA = typeA;
+      $('#amplitudeVal').textContent = pa.A.toFixed(1);
+      $('#frequencyVal').textContent = pa.f.toFixed(1) + (typeA === 'exponential' ? ' s⁻¹' : ' Hz');
+      $('#phaseVal').textContent = Math.round(pa.phaseDeg) + '°';
+      $('#offsetVal').textContent = pa.D.toFixed(1);
+      $('#amplitudeBVal').textContent = pb.A.toFixed(1);
+      $('#frequencyBVal').textContent = pb.f.toFixed(1) + (typeB === 'exponential' ? ' s⁻¹' : ' Hz');
+      $('#phaseBVal').textContent = Math.round(pb.phaseDeg) + '°';
+      $('#offsetBVal').textContent = pb.D.toFixed(1);
+      updateSignalControls('a', typeA);
+      updateSignalControls('b', typeB);
+      const phaseTypes = ['sine', 'cosine', 'square', 'triangle', 'rect', 'sinc'];
+      $('#play').disabled = !phaseTypes.includes(typeA);
+      $('#play').style.opacity = phaseTypes.includes(typeA) ? '1' : '.4';
+      A.type.querySelector('option[value="impulse"]').disabled = state.mode !== 'discrete';
+      B.type.querySelector('option[value="impulse"]').disabled = state.mode !== 'discrete';
+      $('#samplingVal').textContent = (+sampling.value).toFixed(2) + ' s';
+      $('#samplingRow').hidden = state.mode !== 'discrete';
+      $('#chartTitle').textContent = 'Señales y resultado';
+      $('#chartSubtitle').textContent = state.mode === 'continuous'
+        ? 'Tres gráficas · ' + (12 / state.zoom).toFixed(1) + ' s visibles'
+        : 'Tres gráficas · ' + (24 / state.zoom).toFixed(0) + ' muestras aprox.';
+      const axisSuffix = state.mode === 'continuous' ? '(t)' : '[n]';
+      $('#plotTitleA').textContent = 'Señal 1 · x₁' + axisSuffix;
+      $('#plotTitleB').textContent = 'Señal 2 · x₂' + axisSuffix;
+      $('#plotTitleY').textContent = 'Resultado · y' + axisSuffix;
+      $('#plotSubA').textContent = typeNames[typeA];
+      $('#plotSubB').textContent = typeNames[typeB];
+      $('#plotSubY').textContent = 'x₁ ' + symbols[state.operation] + ' x₂';
+      $('#axisHint').textContent = state.mode === 'continuous'
+        ? 'Eje horizontal: tiempo t (s) · Eje vertical: amplitud'
+        : 'Eje horizontal: índice n · Eje vertical: amplitud';
+      $('#formulaA').innerHTML = '<span class="accent-a">' + signalFormula('a') + '</span>';
+      $('#formulaB').innerHTML = '<span class="accent-b">' + signalFormula('b') + '</span>';
+      const variable = state.mode === 'continuous' ? '(t)' : '[n]';
+      $('#formulaResult').innerHTML = '<span class="accent-result">y' + variable + ' = x₁' + variable + ' ' + symbols[state.operation] + ' x₂' + variable + '</span>';
+      const typeNotes = {
+        rect: 'Pulso rectangular periódico con ciclo de trabajo del 50%.',
+        exponential: 'Exponencial causal: λ controla la rapidez del decaimiento.',
+        step: 'El escalón u comienza en t = 0.',
+        ramp: 'La rampa causal empieza en cero y crece linealmente.',
+        sinc: 'sinc(z) = sen(z)/z, con sinc(0) = 1.',
+        impulse: 'El impulso δ[n] solo está definido en tiempo discreto.'
+      };
+      const notes = [typeNotes[typeA], typeNotes[typeB]].filter(Boolean);
+      $('#formulaSub').textContent = notes.length
+        ? notes.join(' ') + ' Las tres gráficas comparten el eje horizontal.'
+        : state.operation === 'divide'
+          ? 'El cociente se calcula punto a punto; queda indefinido donde x₂ se acerca a cero.'
+          : 'Cada curva tiene un panel propio. Las tres comparten el eje horizontal.';
+      $('#operationHelp').textContent = state.operation === 'divide'
+        ? 'El cociente queda indefinido donde x₂ = 0; esos puntos se dejan en blanco.'
+        : 'El resultado se calcula punto a punto entre las dos señales.';
+      $('#operationReadout').textContent = opNames[state.operation];
+      $('#conceptCopy').innerHTML = state.mode === 'continuous'
+        ? 'En continuo se opera en cada instante <strong>t</strong>. En discreto, se combinan muestras con el mismo índice <strong>n</strong>.'
+        : 'En discreto, cada operación combina las muestras que comparten el mismo índice <strong>n</strong>.';
+      $('#operationCopy').textContent = 'Para esta operación, en cada punto se calcula y = x₁ ' + symbols[state.operation] + ' x₂.';
+      const pointerX = state.hover === null ? 0 : state.hover;
+      updateReadouts(pointerX);
+      draw();
+    }
+    function resize() {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      Object.keys(canvases).forEach(key => {
+        const rect = canvases[key].getBoundingClientRect();
+        canvases[key].width = Math.round(rect.width * dpr);
+        canvases[key].height = Math.round(rect.height * dpr);
+        contexts[key].setTransform(dpr, 0, 0, dpr, 0, 0);
+      });
+      draw();
+    }
+    function niceStep(raw) {
+      const power = Math.pow(10, Math.floor(Math.log10(Math.max(raw, 0.0001))));
+      const n = raw / power;
+      return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * power;
+    }
+    function drawTrace(context, xs, ys, X, Y, color, width, discrete) {
+      context.save();
+      context.strokeStyle = color;
+      context.fillStyle = color;
+      context.lineWidth = width;
+      context.lineJoin = 'round';
+      context.lineCap = 'round';
+      context.shadowColor = color;
+      context.shadowBlur = width > 2 ? 8 : 3;
+      context.beginPath();
+      if (discrete) {
+        xs.forEach((x, i) => {
+          if (!Number.isFinite(ys[i])) return;
+          context.moveTo(X(x), Y(0));
+          context.lineTo(X(x), Y(ys[i]));
+        });
+      } else {
+        let drawing = false;
+        xs.forEach((x, i) => {
+          if (!Number.isFinite(ys[i])) { drawing = false; return; }
+          if (!drawing) { context.moveTo(X(x), Y(ys[i])); drawing = true; }
+          else context.lineTo(X(x), Y(ys[i]));
+        });
+      }
+      context.stroke();
+      context.shadowBlur = 0;
+      if (discrete) xs.forEach((x, i) => {
+        if (!Number.isFinite(ys[i])) return;
+        context.beginPath();
+        context.arc(X(x), Y(ys[i]), width > 2 ? 3.8 : 3.1, 0, Math.PI * 2);
+        context.fillStyle = '#0d1423';
+        context.fill();
+        context.strokeStyle = color;
+        context.lineWidth = 1.8;
+        context.stroke();
+      });
+      context.restore();
+    }
+    function draw() {
+      if (!canvases.a.width) return;
+      const xr = xRange(), xMin = -xr, xMax = xr, discrete = state.mode === 'discrete';
+      const xs = [];
+      if (discrete) {
+        for (let n = Math.ceil(xMin); n <= Math.floor(xMax); n++) xs.push(n);
+      } else {
+        const count = Math.max(400, Math.floor(canvases.a.clientWidth * 1.5));
+        for (let i = 0; i <= count; i++) xs.push(xMin + (xMax - xMin) * i / count);
+      }
+      const series = { a: [], b: [], y: [] };
+      xs.forEach(x => {
+        const v = valuesAt(x);
+        series.a.push(v.x1);
+        series.b.push(v.x2);
+        series.y.push(v.y);
+      });
+      drawPanel('a', xs, series.a, xMin, xMax, discrete);
+      drawPanel('b', xs, series.b, xMin, xMax, discrete);
+      drawPanel('y', xs, series.y, xMin, xMax, discrete);
+    }
+    function drawPanel(key, xs, ys, xMin, xMax, discrete) {
+      const canvas = canvases[key], context = contexts[key];
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const W = canvas.width / dpr, H = canvas.height / dpr;
+      context.clearRect(0, 0, W, H);
+      const left = 52, right = 18, top = 8, bottom = 30;
+      const pw = W - left - right, ph = H - top - bottom;
+      const finiteValues = ys.filter(Number.isFinite);
+      let maxY = Math.max(1, ...finiteValues.map(Math.abs));
+      maxY = Math.ceil(maxY * 1.14 * 2) / 2;
+      const X = x => left + (x - xMin) / (xMax - xMin) * pw;
+      const Y = y => top + (maxY - y) / (2 * maxY) * ph;
+      const gridColor = state.grid ? '#243048' : '#1a2438';
+      context.lineWidth = 1;
+      context.font = '10px "DM Mono", monospace';
+      context.textAlign = 'center'; context.textBaseline = 'top';
+      const xStep = discrete ? Math.max(1, Math.ceil((xMax - xMin) / 10)) : niceStep((xMax - xMin) / 10);
+      for (let x = Math.ceil(xMin / xStep) * xStep; x <= xMax + 1e-6; x += xStep) {
+        context.strokeStyle = gridColor;
+        context.beginPath(); context.moveTo(X(x), top); context.lineTo(X(x), top + ph); context.stroke();
+        context.fillStyle = '#78869f';
+        context.fillText(discrete ? String(Math.round(x)) : fmt(x, Number.isInteger(xStep) ? 0 : 1), X(x), top + ph + 7);
+      }
+      const yStep = niceStep(2 * maxY / 4);
+      context.textAlign = 'right'; context.textBaseline = 'middle';
+      for (let y = Math.ceil(-maxY / yStep) * yStep; y <= maxY + 1e-6; y += yStep) {
+        context.strokeStyle = gridColor;
+        context.beginPath(); context.moveTo(left, Y(y)); context.lineTo(left + pw, Y(y)); context.stroke();
+        context.fillStyle = '#78869f'; context.fillText(fmt(y, Number.isInteger(yStep) ? 0 : 1), left - 8, Y(y));
+      }
+      context.strokeStyle = '#55627d'; context.lineWidth = 1.1;
+      context.beginPath(); context.moveTo(left, Y(0)); context.lineTo(left + pw, Y(0)); context.moveTo(X(0), top); context.lineTo(X(0), top + ph); context.stroke();
+      drawTrace(context, xs, ys, X, Y, colors[key], key === 'y' ? 2.5 : 2, discrete);
+      context.fillStyle = '#65738d'; context.font = '10px "DM Mono", monospace'; context.textAlign = 'right';
+      context.fillText(discrete ? 'n' : 't (s)', left + pw, top + ph + 21);
+      if (state.hover !== null && state.hover >= xMin && state.hover <= xMax) {
+        const hx = discrete ? Math.round(state.hover) : state.hover;
+        const v = valuesAt(hx);
+        const pointValue = key === 'a' ? v.x1 : key === 'b' ? v.x2 : v.y;
+        context.setLineDash([3, 4]); context.strokeStyle = '#d7e1f377'; context.lineWidth = 1;
+        context.beginPath(); context.moveTo(X(hx), top); context.lineTo(X(hx), top + ph); context.stroke(); context.setLineDash([]);
+        if (Number.isFinite(pointValue)) {
+          context.beginPath(); context.arc(X(hx), Y(pointValue), 4, 0, Math.PI * 2);
+          context.fillStyle = colors[key]; context.shadowColor = colors[key]; context.shadowBlur = 8; context.fill(); context.shadowBlur = 0;
+        }
+      }
+      canvas._plot = { X, Y, xMin, xMax, left, pw };
+    }
+    function setMode(mode) {
+      if (mode === 'continuous' && (A.type.value === 'impulse' || B.type.value === 'impulse')) {
+        $('#operationHelp').textContent = 'El impulso δ solo existe en discreto. Cambia la forma de esa señal antes de volver a tiempo continuo.';
+        return;
+      }
+      state.mode = mode;
+      $$('.mode-btn').forEach(button => {
+        const active = button.dataset.mode === mode;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      update();
+    }
+    $$('.mode-btn').forEach(button => button.addEventListener('click', () => setMode(button.dataset.mode)));
+    A.type.addEventListener('change', () => {
+      state.typeA = A.type.value;
+      state.phaseAOverride = null;
+      update();
+    });
+    B.type.addEventListener('change', () => {
+      update();
+    });
+    [...Object.values(A).filter(item => item instanceof HTMLInputElement), ...Object.values(B).filter(item => item instanceof HTMLInputElement), sampling].forEach(control => {
+      control.addEventListener('input', () => {
+        state.phaseAOverride = null;
+        update();
+      });
+    });
+    $('#operation').addEventListener('change', event => { state.operation = event.target.value; update(); });
+    $('#gridToggle').addEventListener('click', event => {
+      state.grid = !state.grid;
+      event.currentTarget.classList.toggle('active', state.grid);
+      draw();
+    });
+    $('#zoomIn').addEventListener('click', () => { state.zoom = Math.min(4, state.zoom * 1.25); update(); });
+    $('#zoomOut').addEventListener('click', () => { state.zoom = Math.max(0.5, state.zoom / 1.25); update(); });
+    $('#reset').addEventListener('click', () => {
+      A.amplitude.value = 1; A.frequency.value = 1; A.phase.value = 0; A.offset.value = 0;
+      B.amplitude.value = 0.7; B.frequency.value = 1; B.phase.value = 0; B.offset.value = 0; B.type.value = 'cosine';
+      A.type.value = 'sine'; sampling.value = 0.25; state.typeA = 'sine'; state.operation = 'add'; state.mode = 'continuous';
+      state.phaseAOverride = null; state.hover = null; state.zoom = 1;
+      $('#operation').value = 'add';
+      setMode('continuous');
+    });
+    $('#play').addEventListener('click', () => {
+      state.playing = !state.playing;
+      $('#play').classList.toggle('active', state.playing);
+      $('#play').innerHTML = state.playing
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 5h3v14H8zM15 5h3v14h-3z"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m8 5 11 7-11 7z"/></svg>';
+      if (state.playing) animate();
+    });
+    function animate() {
+      if (!state.playing) return;
+      state.phaseAOverride = ((state.phaseAOverride === null ? +A.phase.value : state.phaseAOverride) + 1.2) % 360;
+      $('#phaseVal').textContent = Math.round(state.phaseAOverride) + '°';
+      $('#formulaA').innerHTML = '<span class="accent-a">' + signalFormula('a') + '</span>';
+      updateReadouts(state.hover === null ? 0 : state.hover);
+      draw();
+      requestAnimationFrame(animate);
+    }
+    Object.values(canvases).forEach(canvas => {
+      canvas.addEventListener('pointermove', event => {
+        const rect = canvas.getBoundingClientRect(), plot = canvas._plot;
+        if (!plot) return;
+        const px = event.clientX - rect.left;
+        let x = plot.xMin + (px - plot.left) / plot.pw * (plot.xMax - plot.xMin);
+        if (state.mode === 'discrete') x = Math.round(x);
+        state.hover = x;
+        const vals = valuesAt(x);
+        const firstLine = state.mode === 'continuous'
+          ? 't = ' + fmt(vals.t, 2) + ' s'
+          : 'n = ' + x + ' · t = ' + fmt(vals.t, 2) + ' s';
+        tooltip.innerHTML = firstLine + '<br><span style="color:' + colors.a + '">x₁ = ' + fmt(vals.x1, 3) + '</span> · <span style="color:' + colors.b + '">x₂ = ' + fmt(vals.x2, 3) + '</span><br><span style="color:' + colors.y + '">y = ' + fmt(vals.y, 3) + '</span>';
+        tooltip.style.display = 'block';
+        tooltip.style.whiteSpace = 'normal';
+        const wrapRect = wrap.getBoundingClientRect(), tooltipWidth = 210;
+        tooltip.style.left = Math.min(Math.max(8, event.clientX - wrapRect.left + 14), wrapRect.width - tooltipWidth) + 'px';
+        tooltip.style.top = Math.max(8, event.clientY - wrapRect.top - 54) + 'px';
+        updateReadouts(x);
+        draw();
+      });
+      canvas.addEventListener('pointerleave', () => {
+        state.hover = null;
+        tooltip.style.display = 'none';
+        updateReadouts(0);
+        draw();
+      });
+    });
+    new ResizeObserver(resize).observe(wrap);
+    window.addEventListener('resize', resize);
+    update();
+    resize();
+  })();
+  </script>
+</body>
+</html>
